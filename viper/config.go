@@ -1,4 +1,4 @@
-package config
+package viper
 
 import (
 	"fmt"
@@ -7,23 +7,23 @@ import (
 	"os"
 )
 
-// MustLoadConfig load configurations from yml config file
+// MustLoadConfig load configurations from yml viper file
 // All services should provide a configuration file along with its docker images.
-// And all configurations inside the config file can be over write by corresponding environment variable
+// And all configurations inside the viper file can be over write by corresponding environment variable
 // It’s important to recognize that Viper treats ENV variables as case-sensitive.
 func MustLoadConfig(envPrefix string, configPath *string, configurations interface{}) *viper.Viper {
 	var config string
 	if configPath == nil {
 		if configEnv := os.Getenv(consts.ConfigPath); configEnv == "" {
 			config = consts.DefaultConfigPath
-			fmt.Printf("can not find config path or config path environment variable, using default config path: %s\n", config)
+			fmt.Printf("can not find viper path or viper path environment variable, using default viper path: %s\n", config)
 		} else {
 			config = configEnv
-			fmt.Printf("get config path from env:%s, value:%s\n", consts.ConfigPath, config)
+			fmt.Printf("get viper path from env:%s, value:%s\n", consts.ConfigPath, config)
 		}
 	} else {
 		config = *configPath
-		fmt.Printf("you are using config file from: %v\n", config)
+		fmt.Printf("you are using viper file from: %v\n", config)
 	}
 
 	v := viper.New()
@@ -34,7 +34,7 @@ func MustLoadConfig(envPrefix string, configPath *string, configurations interfa
 	// Read Config from disk and env vars
 	err := v.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		panic(fmt.Errorf("Fatal error viper file: %s \n", err))
 	}
 	fmt.Println("Config loaded successfully...")
 
